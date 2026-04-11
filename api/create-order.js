@@ -53,7 +53,7 @@ export default async function handler(req, res) {
         application_context: {
           brand_name: 'LUMINOVA',
           locale: 'fr-FR',
-          shipping_preference: 'NO_SHIPPING',
+        shipping_preference: 'GET_FROM_FILE',
           user_action: 'PAY_NOW',
         },
       }),
