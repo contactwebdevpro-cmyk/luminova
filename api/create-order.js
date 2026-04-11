@@ -72,7 +72,7 @@ export default async function handler(req, res) {
         purchase_units: [{
           amount: {
             currency_code: currency || 'EUR',
-            value: amount || '0.01'
+            value: amount || '7.90'
           },
           description: 'Lampe Torche Luminova — 100 000 Lumens',
           custom_id: customerData.email || 'client',
