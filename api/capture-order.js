@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
 
   // Même logique que create-order : sandbox ou live selon la variable d'env
-  const PAYPAL_BASE_URL = process.env.PAYPAL_SANDBOX === 'false'
+  const PAYPAL_BASE_URL = process.env.PAYPAL_SANDBOX === 'true'
     ? 'https://api-m.sandbox.paypal.com'
     : 'https://api-m.paypal.com';
 
