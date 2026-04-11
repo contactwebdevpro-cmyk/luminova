@@ -1,15 +1,17 @@
-// api/create-order.js
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const PAYPAL_CLIENT_ID     = process.env.PAYPAL_CLIENT_ID;
   const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET;
   const RESEND_API_KEY       = process.env.RESEND_API_KEY;
-  const NOTIFY_EMAIL         = process.env.NOTIFY_EMAIL;
+
+  // ✅ TON EMAIL DIRECT (fallback si Vercel pas configuré)
+  const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || "enzoguedeau00@gmail.com";
 
   if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
     return res.status(500).json({ error: 'Variables PayPal manquantes.' });
@@ -20,106 +22,136 @@ export default async function handler(req, res) {
     : 'https://api-m.paypal.com';
 
   try {
-    const { amount, currency, customer } = req.body;
+    const { amount, currency } = req.body;
+    const customer = req.body.customer || {};
 
-    // ── 1. Token PayPal ──────────────────────────────────────────────────
+    // ✅ sécurisation des données client
+    const customerData = {
+      firstName: customer.firstName || '',
+      lastName: customer.lastName || '',
+      email: customer.email || '',
+      phone: customer.phone || '',
+      address: customer.address || '',
+      zip: customer.zip || '',
+      city: customer.city || '',
+      country: customer.country || '',
+    };
+
+    console.log("📦 ORDER CUSTOMER:", customerData);
+
+    // ── 1. TOKEN PAYPAL ─────────────────────────────
     const authRes = await fetch(`${PAYPAL_BASE_URL}/v1/oauth2/token`, {
       method: 'POST',
       headers: {
-        'Content-Type':  'application/x-www-form-urlencoded',
-        'Authorization': 'Basic ' + Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`).toString('base64'),
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ' + Buffer.from(
+          `${PAYPAL_CLIENT_ID}:${PAYPAL_CLIENT_SECRET}`
+        ).toString('base64'),
       },
       body: 'grant_type=client_credentials',
     });
+
     const authData = await authRes.json();
+
     if (!authData.access_token) {
-      return res.status(500).json({ error: 'Auth PayPal échouée', details: authData.error_description });
+      return res.status(500).json({
+        error: 'Auth PayPal échouée',
+        details: authData.error_description
+      });
     }
 
-    // ── 2. Créer la commande PayPal ──────────────────────────────────────
+    // ── 2. CREATE ORDER ─────────────────────────────
     const orderRes = await fetch(`${PAYPAL_BASE_URL}/v2/checkout/orders`, {
       method: 'POST',
       headers: {
-        'Content-Type':  'application/json',
+        'Content-Type': 'application/json',
         'Authorization': `Bearer ${authData.access_token}`,
       },
       body: JSON.stringify({
         intent: 'CAPTURE',
         purchase_units: [{
-          amount: { currency_code: currency || 'EUR', value: amount || '7.90' },
+          amount: {
+            currency_code: currency || 'EUR',
+            value: amount || '7.90'
+          },
           description: 'Lampe Torche Luminova — 100 000 Lumens',
-          custom_id: customer?.email || 'client',
+          custom_id: customerData.email || 'client',
         }],
         application_context: {
           brand_name: 'LUMINOVA',
           locale: 'fr-FR',
-        shipping_preference: 'GET_FROM_FILE',
+          shipping_preference: 'GET_FROM_FILE', // ✅ FIX IMPORTANT
           user_action: 'PAY_NOW',
         },
       }),
     });
+
     const orderData = await orderRes.json();
+
     if (!orderData.id) {
-      return res.status(500).json({ error: 'Création commande échouée', details: orderData.details?.[0]?.description });
+      return res.status(500).json({
+        error: 'Création commande échouée',
+        details: orderData.details?.[0]?.description
+      });
     }
 
-    // ── 3. Envoyer email de notification (si Resend configuré) ───────────
-    if (RESEND_API_KEY && NOTIFY_EMAIL && customer) {
+    // ── 3. EMAIL RESEND ─────────────────────────────
+    if (
+      RESEND_API_KEY &&
+      NOTIFY_EMAIL &&
+      customerData.email &&
+      customerData.firstName &&
+      customerData.lastName
+    ) {
       const orderNum = 'LUM-' + Date.now();
+
       const emailHtml = `
-        <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#fff;padding:32px;border-radius:8px;border:1px solid #eee">
-          <h2 style="color:#111;margin-bottom:4px">🛍️ Nouvelle commande Luminova</h2>
-          <p style="color:#666;margin-top:0">Réf. <strong>${orderNum}</strong> — PayPal Order ID: ${orderData.id}</p>
-          
-          <hr style="border:none;border-top:1px solid #eee;margin:20px 0">
-          
-          <h3 style="color:#111;margin-bottom:12px">👤 Client</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:14px">
-            <tr><td style="padding:6px 0;color:#666;width:140px">Nom</td><td style="padding:6px 0"><strong>${customer.firstName} ${customer.lastName}</strong></td></tr>
-            <tr><td style="padding:6px 0;color:#666">Email</td><td style="padding:6px 0">${customer.email}</td></tr>
-            <tr><td style="padding:6px 0;color:#666">Téléphone</td><td style="padding:6px 0">${customer.phone || '—'}</td></tr>
-          </table>
+        <div style="font-family:Arial;max-width:600px;margin:auto;padding:24px;border:1px solid #eee">
+          <h2>🛍️ Nouvelle commande Luminova</h2>
+          <p>Réf: <b>${orderNum}</b><br>PayPal ID: ${orderData.id}</p>
 
-          <hr style="border:none;border-top:1px solid #eee;margin:20px 0">
+          <hr>
 
-          <h3 style="color:#111;margin-bottom:12px">📦 Adresse de livraison</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:14px">
-            <tr><td style="padding:6px 0;color:#666;width:140px">Adresse</td><td style="padding:6px 0">${customer.address}</td></tr>
-            <tr><td style="padding:6px 0;color:#666">Code postal</td><td style="padding:6px 0">${customer.zip}</td></tr>
-            <tr><td style="padding:6px 0;color:#666">Ville</td><td style="padding:6px 0">${customer.city}</td></tr>
-            <tr><td style="padding:6px 0;color:#666">Pays</td><td style="padding:6px 0">${customer.country}</td></tr>
-          </table>
+          <h3>👤 Client</h3>
+          <p>
+            ${customerData.firstName} ${customerData.lastName}<br>
+            ${customerData.email}<br>
+            ${customerData.phone || '—'}
+          </p>
 
-          <hr style="border:none;border-top:1px solid #eee;margin:20px 0">
+          <h3>📦 Adresse</h3>
+          <p>
+            ${customerData.address}<br>
+            ${customerData.zip} ${customerData.city}<br>
+            ${customerData.country}
+          </p>
 
-          <h3 style="color:#111;margin-bottom:12px">🛒 Commande</h3>
-          <table style="width:100%;border-collapse:collapse;font-size:14px">
-            <tr><td style="padding:6px 0;color:#666;width:140px">Produit</td><td style="padding:6px 0">Lampe Torche Luminova</td></tr>
-            <tr><td style="padding:6px 0;color:#666">Quantité</td><td style="padding:6px 0">1</td></tr>
-            <tr><td style="padding:6px 0;color:#666">Montant</td><td style="padding:6px 0"><strong style="color:#e8232a">${amount} ${currency}</strong></td></tr>
-            <tr><td style="padding:6px 0;color:#666">Statut paiement</td><td style="padding:6px 0"><span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:4px;font-size:12px">En attente de capture</span></td></tr>
-          </table>
+          <hr>
 
-          <hr style="border:none;border-top:1px solid #eee;margin:20px 0">
-          <p style="color:#999;font-size:12px;text-align:center">Luminova — Commande reçue automatiquement</p>
+          <h3>🛒 Commande</h3>
+          <p>Lampe Torche Luminova</p>
+          <p><b>${amount} ${currency}</b></p>
+
+          <p style="color:#999;font-size:12px">Commande automatique Luminova</p>
         </div>
       `;
 
       await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
-          'Content-Type':  'application/json',
+          'Content-Type': 'application/json',
           'Authorization': `Bearer ${RESEND_API_KEY}`,
         },
         body: JSON.stringify({
-          from:    'Luminova <commandes@luminova-sell.vercel.app>',
-          to:      [NOTIFY_EMAIL],
-          subject: `🛍️ Nouvelle commande — ${customer.firstName} ${customer.lastName} — 7.90 EUR`,
-          html:    emailHtml,
+          from: 'Luminova <commandes@luminova-sell.vercel.app>',
+          to: [NOTIFY_EMAIL],
+          subject: `🛍️ Nouvelle commande - ${customerData.firstName} ${customerData.lastName}`,
+          html: emailHtml,
         }),
-      }).catch(e => console.error('Email error:', e));
+      }).catch(err => console.error("Email error:", err));
     }
 
+    // ── RESPONSE ────────────────────────────────────
     return res.status(200).json({ id: orderData.id });
 
   } catch (err) {
