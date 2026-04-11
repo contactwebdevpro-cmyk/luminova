@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luminova | Avis Clients</title>
+<meta name="description" content="Découvrez les avis clients sur la lampe torche Luminova. Plus de 4 800 avis vérifiés.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+  --gold: #FFD700;
+  --red: #E8232A;
+  --red-dark: #b01a20;
+  --bg: #080808;
+  --bg2: #111111;
+  --bg3: #191919;
+  --text: #f0f0f0;
+  --muted: #888;
+  --border: rgba(255,215,0,0.15);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; width: 100%; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 60px;
+  background: rgba(8,8,8,0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px; letter-spacing: 4px; color: var(--gold);
+  text-shadow: 0 0 20px rgba(255,215,0,0.4);
+  text-decoration: none;
+}
+nav ul { display: flex; gap: 36px; list-style: none; }
+nav ul li a {
+  font-size: 13px; font-weight: 500; letter-spacing: 1.5px;
+  text-transform: uppercase; cursor: pointer; color: var(--muted);
+  position: relative; padding-bottom: 4px; transition: color 0.25s;
+  text-decoration: none; display: block;
+}
+nav ul li a::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 0; height: 1px; background: var(--gold); transition: width 0.3s ease;
+}
+nav ul li a:hover { color: var(--text); }
+nav ul li a:hover::after { width: 100%; }
+.nav-cta {
+  background: var(--red); color: white;
+  font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  padding: 10px 24px; border-radius: 4px; cursor: pointer;
+  transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+  text-decoration: none;
+}
+.nav-cta:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,35,42,0.4); }
+
+/* ─── PAGE HEADER ─── */
+.page-header {
+  padding: 160px 60px 80px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255,215,0,0.06) 0%, transparent 60%);
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.page-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255,215,0,0.015) 0px,
+    rgba(255,215,0,0.015) 1px,
+    transparent 1px,
+    transparent 80px
+  );
+  pointer-events: none;
+}
+.page-header-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3);
+  border-radius: 2px; padding: 6px 14px;
+  font-size: 11px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 24px;
+}
+.page-header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 80px; letter-spacing: 3px; line-height: 1;
+  margin-bottom: 16px;
+}
+.page-header h1 span { color: var(--gold); text-shadow: 0 0 40px rgba(255,215,0,0.4); }
+.page-header p { color: var(--muted); font-size: 16px; font-weight: 300; max-width: 500px; margin: 0 auto; }
+
+/* ─── GLOBAL SCORE ─── */
+.global-score {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 60px;
+  display: flex; align-items: center; justify-content: center; gap: 80px;
+  flex-wrap: wrap;
+}
+.score-main { text-align: center; }
+.score-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 100px; line-height: 1;
+  color: var(--gold);
+  text-shadow: 0 0 40px rgba(255,215,0,0.4);
+}
+.score-stars { display: flex; gap: 6px; justify-content: center; margin: 8px 0; }
+.score-stars i { font-size: 22px; color: var(--gold); }
+.score-count { font-size: 13px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+
+.score-bars { display: flex; flex-direction: column; gap: 10px; min-width: 280px; }
+.bar-row { display: flex; align-items: center; gap: 12px; }
+.bar-label { font-size: 12px; color: var(--muted); width: 48px; text-align: right; white-space: nowrap; }
+.bar-track { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+.bar-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--gold), #ffec6e);
+  transform-origin: left;
+  animation: bar-grow 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform: scaleX(0);
+}
+@keyframes bar-grow { to { transform: scaleX(1); } }
+.bar-pct { font-size: 12px; color: var(--muted); width: 36px; }
+
+.score-verified {
+  display: flex; flex-direction: column; gap: 16px;
+  padding-left: 60px; border-left: 1px solid var(--border);
+}
+.verified-item {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 13px; color: #ccc;
+}
+.verified-item i { color: var(--gold); font-size: 15px; }
+
+/* ─── FILTERS ─── */
+.filters-bar {
+  padding: 30px 60px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.filter-label { font-size: 12px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-right: 4px; }
+.filter-btn {
+  background: var(--bg3); border: 1px solid rgba(255,255,255,0.08);
+  color: var(--muted); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.5px; padding: 8px 18px; border-radius: 3px; cursor: pointer;
+  transition: all 0.25s; font-family: 'Inter', sans-serif;
+}
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--gold); color: var(--gold);
+  background: rgba(255,215,0,0.07);
+}
+.filter-count {
+  margin-left: auto;
+  font-size: 12px; color: var(--muted); letter-spacing: 0.5px;
+}
+
+/* ─── REVIEWS GRID ─── */
+.reviews-section { padding: 60px; }
+
+.reviews-masonry {
+  columns: 3;
+  column-gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.review-card {
+  background: var(--bg3); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px; padding: 28px;
+  margin-bottom: 20px;
+  break-inside: avoid;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s; cursor: default;
+  animation: fade-up 0.5s ease both;
+}
+.review-card:nth-child(1) { animation-delay: 0.05s; }
+.review-card:nth-child(2) { animation-delay: 0.1s; }
+.review-card:nth-child(3) { animation-delay: 0.15s; }
+.review-card:nth-child(4) { animation-delay: 0.2s; }
+.review-card:nth-child(5) { animation-delay: 0.25s; }
+.review-card:nth-child(6) { animation-delay: 0.3s; }
+.review-card:nth-child(7) { animation-delay: 0.35s; }
+.review-card:nth-child(8) { animation-delay: 0.4s; }
+.review-card:nth-child(9) { animation-delay: 0.45s; }
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.review-card:hover { border-color: rgba(255,215,0,0.25); transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+
+.review-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; gap: 12px; }
+.review-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--bg2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--gold);
+  flex-shrink: 0;
+}
+.review-meta { flex: 1; }
+.review-author { font-size: 13px; font-weight: 600; color: var(--text); }
+.review-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.review-verified {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 10px; color: #4caf50; letter-spacing: 0.5px; text-transform: uppercase;
+  background: rgba(76,175,80,0.1); border: 1px solid rgba(76,175,80,0.2);
+  padding: 3px 8px; border-radius: 2px; flex-shrink: 0; white-space: nowrap;
+}
+.review-verified i { font-size: 9px; }
+
+.review-stars { color: var(--gold); margin-bottom: 10px; display: flex; gap: 3px; }
+.review-stars i { font-size: 13px; }
+.review-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+.review-text { color: #aaa; font-size: 14px; line-height: 1.7; font-weight: 300; }
+
+.review-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 14px;
+  background: rgba(255,215,0,0.07); border: 1px solid rgba(255,215,0,0.2);
+  color: var(--gold); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.5px; padding: 4px 10px; border-radius: 2px;
+}
+.review-tag i { font-size: 10px; }
+
+.review-usage {
+  margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; color: var(--muted);
+}
+.review-usage i { font-size: 11px; }
+
+/* ─── FEATURED REVIEW ─── */
+.review-card.featured {
+  border-color: rgba(255,215,0,0.25);
+  background: linear-gradient(135deg, rgba(255,215,0,0.06), var(--bg3));
+  position: relative; overflow: hidden;
+}
+.review-card.featured::before {
+  content: '"';
+  position: absolute; top: -10px; right: 20px;
+  font-family: 'Bebas Neue', sans-serif; font-size: 120px;
+  color: rgba(255,215,0,0.06); line-height: 1; pointer-events: none;
+}
+
+/* ─── LOAD MORE ─── */
+.load-more-wrap { text-align: center; margin-top: 60px; }
+.load-more-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: transparent; color: var(--gold);
+  border: 1px solid rgba(255,215,0,0.4);
+  padding: 14px 36px; border-radius: 4px;
+  font-size: 13px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  transition: background 0.25s, border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+}
+.load-more-btn:hover {
+  background: rgba(255,215,0,0.1); border-color: var(--gold);
+  transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,215,0,0.15);
+}
+
+/* ─── CTA BANNER ─── */
+.cta-banner {
+  margin: 80px 60px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 60px;
+  display: flex; align-items: center; justify-content: space-between; gap: 40px;
+  position: relative; overflow: hidden;
+}
+.cta-banner::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 0% 50%, rgba(255,215,0,0.07), transparent 60%);
+  pointer-events: none;
+}
+.cta-banner-text { position: relative; z-index: 1; }
+.cta-banner-text h3 {
+  font-family: 'Bebas Neue', sans-serif; font-size: 44px; letter-spacing: 2px; margin-bottom: 10px;
+}
+.cta-banner-text h3 span { color: var(--gold); }
+.cta-banner-text p { color: var(--muted); font-size: 15px; font-weight: 300; }
+.cta-banner-actions { display: flex; align-items: center; gap: 20px; position: relative; z-index: 1; flex-shrink: 0; }
+.buy-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--gold); color: #000; border: none;
+  padding: 18px 40px; border-radius: 4px;
+  font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.3s, background 0.25s;
+  font-family: 'Inter', sans-serif;
+}
+.buy-btn::before {
+  content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.4s;
+}
+.buy-btn:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(255,215,0,0.4); background: #ffe033; }
+.buy-btn:hover::before { left: 100%; }
+.buy-btn i { font-size: 13px; transition: transform 0.3s; }
+.buy-btn:hover i { transform: translateX(4px); }
+.price-tag { text-align: center; }
+.price-old { font-size: 13px; color: var(--muted); text-decoration: line-through; }
+.price-new { font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: var(--gold); line-height: 1; }
+
+/* ─── FOOTER ─── */
+footer {
+  text-align: center; padding: 40px 60px;
+  background: var(--bg); border-top: 1px solid var(--border);
+  color: var(--muted); font-size: 13px; letter-spacing: 0.5px;
+}
+footer span { color: var(--gold); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1100px) {
+  .reviews-masonry { columns: 2; }
+  .score-verified { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: 24px; }
+  .global-score { gap: 40px; }
+}
+@media (max-width: 768px) {
+  nav { padding: 16px 24px; }
+  nav ul { display: none; }
+  .page-header { padding: 120px 24px 60px; }
+  .page-header h1 { font-size: 52px; }
+  .global-score { padding: 40px 24px; flex-direction: column; gap: 32px; }
+  .score-verified { border-top: 1px solid var(--border); padding-top: 24px; }
+  .filters-bar { padding: 20px 24px; }
+  .reviews-section { padding: 40px 24px; }
+  .reviews-masonry { columns: 1; }
+  .cta-banner { flex-direction: column; text-align: center; margin: 40px 24px; padding: 40px 24px; }
+  .cta-banner-actions { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">LUMINOVA</div>
+   <ul>
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="avis.html">Avis</a></li>
+    
+  </ul>
+  <div class="nav-cta">Commander</div>
+</nav>
+
+<!-- PAGE HEADER -->
+<section class="page-header">
+  <div class="page-header-eyebrow">Avis vérifiés</div>
+  <h1>Ce que disent<br>nos <span>clients</span></h1>
+  <p>Des milliers d'aventuriers, professionnels et passionnés font confiance à la Luminova.</p>
+</section>
+
+<!-- GLOBAL SCORE -->
+<div class="global-score">
+  <div class="score-main">
+    <div class="score-number">4,8</div>
+    <div class="score-stars">
+      <i class="fa-solid fa-star"></i>
+      <i class="fa-solid fa-star"></i>
+      <i class="fa-solid fa-star"></i>
+      <i class="fa-solid fa-star"></i>
+      <i class="fa-solid fa-star-half-stroke"></i>
+    </div>
+    <div class="score-count">4 832 avis vérifiés</div>
+  </div>
+
+  <div class="score-bars">
+    <div class="bar-row">
+      <span class="bar-label">5 étoiles</span>
+      <div class="bar-track"><div class="bar-fill" style="width:78%; animation-delay:0.1s"></div></div>
+      <span class="bar-pct">78%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">4 étoiles</span>
+      <div class="bar-track"><div class="bar-fill" style="width:14%; animation-delay:0.2s"></div></div>
+      <span class="bar-pct">14%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">3 étoiles</span>
+      <div class="bar-track"><div class="bar-fill" style="width:5%; animation-delay:0.3s"></div></div>
+      <span class="bar-pct">5%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">2 étoiles</span>
+      <div class="bar-track"><div class="bar-fill" style="width:2%; animation-delay:0.4s"></div></div>
+      <span class="bar-pct">2%</span>
+    </div>
+    <div class="bar-row">
+      <span class="bar-label">1 étoile</span>
+      <div class="bar-track"><div class="bar-fill" style="width:1%; animation-delay:0.5s"></div></div>
+      <span class="bar-pct">1%</span>
+    </div>
+  </div>
+
+  <div class="score-verified">
+    <div class="verified-item"><i class="fa-solid fa-circle-check"></i> Avis acheteurs vérifiés</div>
+    <div class="verified-item"><i class="fa-solid fa-shield-halved"></i> Aucun avis rémunéré</div>
+    <div class="verified-item"><i class="fa-solid fa-globe"></i> 48 pays représentés</div>
+    <div class="verified-item"><i class="fa-solid fa-star"></i> 99% recommanderaient le produit</div>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters-bar">
+  <span class="filter-label">Filtrer :</span>
+  <button class="filter-btn active" onclick="setFilter(this, 'all')">Tous les avis</button>
+  <button class="filter-btn" onclick="setFilter(this, '5')"><i class="fa-solid fa-star" style="font-size:10px;color:var(--gold)"></i> 5 étoiles</button>
+  <button class="filter-btn" onclick="setFilter(this, '4')"><i class="fa-solid fa-star" style="font-size:10px;color:var(--gold)"></i> 4 étoiles</button>
+  <button class="filter-btn" onclick="setFilter(this, 'pro')">Professionnels</button>
+  <button class="filter-btn" onclick="setFilter(this, 'outdoor')">Outdoor</button>
+  <button class="filter-btn" onclick="setFilter(this, 'verified')">Achat vérifié</button>
+  <span class="filter-count">4 832 résultats</span>
+</div>
+
+<!-- REVIEWS -->
+<section class="reviews-section">
+  <div class="reviews-masonry">
+
+    <!-- FEATURED -->
+    <div class="review-card featured">
+      <div class="review-header">
+        <div class="review-avatar">T</div>
+        <div class="review-meta">
+          <div class="review-author">Thomas R.</div>
+          <div class="review-date">3 mars 2026</div>
+        </div>
+        <div class="review-verified"><i class="fa-solid fa-circle-check"></i> Vérifié</div>
+      </div>
+      <div class="review-stars">
+        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+      </div>
+      <div class="review-title">Impressionnant, au-delà de mes attentes</div>
+      <p class="review-text">J'utilise cette lampe lors de mes sorties de randonnée nocturne en montagne. La portée est réelle et l'autonomie tient vraiment les 70h en mode faible. Je ne pensais pas qu'une lampe aussi compacte pouvait projeter autant de lumière. Un achat que je ne regrette pas du tout.</p>
+      <span class="review-tag"><i class="fa-solid fa-mountain"></i> Randonnée nocturne</span>
+    </div>
+
+    <div class="review-card">
+      <div class="review-header">
+        <div class="review-avatar">K</div>
+        <div class="review-meta">
+          <div class="review-author">Karim D.</div>
+          <div class="review-date">17 février 2026</div>
+        </div>
+        <div class="review-verified"><i class="fa-solid fa-circle-check"></i> Vérifié</div>
+      </div>
+      <div class="review-stars">
+        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+      </div>
+      <div class="review-title">Parfaite pour la sécurité</div>
+      <p class="review-text">Travaillant dans la sécurité, je cherchais une lampe fiable et puissante. La Luminova dépasse toutes mes attentes. Robuste, légère et ultra lumineuse.</p>
+      <span class="review-tag"><i class="fa-solid fa-shield-halved"></i> Professionnel sécurité</span>
+    </div>
+
+    <div class="review-card">
+      <div class="review-header">
+        <div class="review-avatar">L</div>
+        <div class="review-meta">
+          <div class="review-author">Lucie M.</div>
+          <div class="review-date">9 janvier 2026</div>
+        </div>
+        <div class="review-verified"><i class="fa-solid fa-circle-check"></i> Vérifié</div>
+      </div>
+      <div class="review-stars">
+        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+      </div>
+      <div class="review-title">Très bonne lampe, quelques détails à améliorer</div>
+      <p class="review-text">Très bonne lampe, la charge USB-C est un vrai plus. Je retire une étoile car la boîte aurait pu être plus soignée, mais le produit en lui-même est excellent.</p>
+      <div class="review-usage"><i class="fa-solid fa-check-circle"></i> Usage quotidien</div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-header">
+        <div class="review-avatar">M</div>
+        <div class="review-meta">
+          <div class="review-author">Marc-Antoine B.</div>
+          <div class="review-date">22 janvier 2026</div>
+        </div>
+        <div class="review-verified"><i class="fa-solid fa-circle-check"></i> Vérifié</div>
+      </div>
+      <div class="review-stars">
+        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+      </div>
+      <div class="review-title">Un must-have pour la chasse</div>
+      <p class="review-text">La portée de 8 000m n'est pas un argument marketing, c'est réel. J'ai pu repérer des sangliers à plus d'un kilomètre dans un champ. La solidité est au rendez-vous, même après une chute dans la boue. Imperméabilité IP67 : testée sous la pluie battante, aucun problème.</p>
+      <span class="review-tag"><i class="fa-solid fa-crosshairs"></i> Chasse</span>
+    </div>
+
+    <div class="review-card">
+      <div class="review-header">
+        <div class="review-avatar">S</div>
+        <div class="review-meta">
+          <div class="review-author">Sophie V.</div>
+          <div class="review-date">14 mars 2026</div>
+        </div>
+        <div class="review-verified"><i class="fa-solid fa-circle-check"></i> Vérifié</div>
+      </div>
+      <div class="review-stars">
+        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+      </div>
+      <div class="review-title">Cadeau idéal pour mon mari</div>
+      <p class="review-text">Offerte à mon mari passionné de camping. Il ne l'a plus quitté depuis. La qualité de fabrication est impressionnante pour ce prix. Livraison rapide, emballage correct.</p>
+    </div>
+
+    <div class="review-card">
+      <div class="review-header">
+        <div class="review-avatar">J</div>
+        <div class="review-meta">
+          <div class="review-author">Jean-Pierre F.</div>
+          <div class="review-date">5 février 2026</div>
+        </div>
+        <div class="review-verified"><i class="fa-solid fa-circle-check"></i> Vérifié</div>
+      </div>
+      <div class="review-stars">
+        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+      </div>
+      <div class="review-title">Pompier volontaire — Indispensable</div>
+      <p class="review-text">Utilisée lors d'interventions nocturnes, elle n'a jamais failli. La prise en main est excellente même avec des gants épais. Je l'ai recommandée à toute mon équipe.</p>
+      <span class="review-tag"><i class="fa-solid fa-fire"></i> Pompier volontaire</span>
+    </div>
+
+    <div class="review-card">
+      <div class="review-header">
+        <div class="review-avatar">A</div>
+        <div class="review-meta">
+          <div class="review-author">Anaïs C.</div>
+          <div class="review-date">27 mars 2026</div>
+        </div>
+        <div class="review-verified"><i class="fa-solid fa-circle-check"></i> Vérifié</div>
+      </div>
+      <div class="review-stars">
+        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+      </div>
+      <div class="review-title">Très satisfaite, rapport qualité-prix imbattable</div>
+      <p class="review-text">Pour ce prix, je n'espérais pas grand chose. Mais la lumière est vraiment puissante et l'autonomie tient bien. Je l'utilise pour mes balades en forêt le soir. Le réglage de l'intensité est pratique.</p>
+      <div class="review-usage"><i class="fa-solid fa-tree"></i> Balades nocturnes</div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-header">
+        <div class="review-avatar">R</div>
+        <div class="review-meta">
+          <div class="review-author">Romain T.</div>
+          <div class="review-date">11 mars 2026</div>
+        </div>
+        <div class="review-verified"><i class="fa-solid fa-circle-check"></i> Vérifié</div>
+      </div>
+      <div class="review-stars">
+        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+      </div>
+      <div class="review-title">La meilleure lampe que j'ai possédée</div>
+      <p class="review-text">J'en suis à ma cinquième lampe torche en 10 ans. C'est de loin la meilleure. La puissance est incroyable, la batterie dure, et l'USB-C c'est une révolution par rapport à mes anciennes lampes. Je ne reviendrai jamais en arrière.</p>
+    </div>
+
+    <div class="review-card">
+      <div class="review-header">
+        <div class="review-avatar">N</div>
+        <div class="review-meta">
+          <div class="review-author">Nicolas H.</div>
+          <div class="review-date">2 avril 2026</div>
+        </div>
+        <div class="review-verified"><i class="fa-solid fa-circle-check"></i> Vérifié</div>
+      </div>
+      <div class="review-stars">
+        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+      </div>
+      <div class="review-title">Test étanchéité réussi haut la main</div>
+      <p class="review-text">Je pêche en mer et j'ai testé l'étanchéité involontairement — la lampe est tombée à l'eau. Récupérée 2 minutes plus tard, elle fonctionnait parfaitement. L'IP67 n'est clairement pas une promesse en l'air.</p>
+      <span class="review-tag"><i class="fa-solid fa-fish"></i> Pêche en mer</span>
+    </div>
+
+  </div>
+
+  <div class="load-more-wrap">
+   
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <div class="cta-banner-text">
+    <h3>Rejoignez nos <span>4 832 clients</span><br>satisfaits</h3>
+    <p>Profitez de l'offre limitée à -74% — Stock en cours d'épuisement</p>
+  </div>
+  <div class="cta-banner-actions">
+    <div class="price-tag">
+      <div class="price-old">29,90 €</div>
+      <div class="price-new">7,90€</div>
+    </div>
+    <button class="buy-btn">
+      Commander maintenant <i class="fa-solid fa-arrow-right"></i>
+    </button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>© 2026 <span>LUMINOVA</span> — Tous droits réservés</footer>
+
+<script>
+function setFilter(btn, filter) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// Animate bars when in view
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.animationPlayState = 'running';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.bar-fill').forEach((el, i) => {
+  el.style.animationPlayState = 'paused';
+  el.style.animationDelay = `${i * 0.12}s`;
+  observer.observe(el);
+});
+</script>
+</body>
+</html>

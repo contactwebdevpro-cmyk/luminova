@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luminova | Commander</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+  --gold: #FFD700;
+  --red: #E8232A;
+  --bg: #080808;
+  --bg2: #111111;
+  --bg3: #191919;
+  --text: #f0f0f0;
+  --muted: #888;
+  --border: rgba(255,215,0,0.15);
+  --green: #22c55e;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; min-height: 100vh; }
+
+nav {
+  position: fixed; top: 0; width: 100%; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 60px;
+  background: rgba(8,8,8,0.95); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 4px; color: var(--gold); text-shadow: 0 0 20px rgba(255,215,0,0.4); text-decoration: none; }
+.nav-back { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; transition: color 0.25s; }
+.nav-back:hover { color: var(--gold); }
+.nav-back i { font-size: 11px; }
+
+.checkout-page { min-height: 100vh; padding: 120px 60px 80px; display: flex; align-items: flex-start; justify-content: center; gap: 48px; max-width: 1200px; margin: 0 auto; }
+
+.product-summary { flex: 1; max-width: 460px; position: sticky; top: 120px; }
+.summary-label { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; }
+
+.product-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 20px; display: flex; gap: 20px; align-items: center; }
+.product-card-img { width: 100px; height: 100px; background: var(--bg3); border-radius: 8px; border: 1px solid rgba(255,215,0,0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+.product-card-img img { width: 90px; height: 90px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(255,215,0,0.2)); }
+.placeholder-icon { font-size: 36px; color: var(--gold); opacity: 0.4; }
+.product-card-name { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; margin-bottom: 6px; }
+.product-card-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.product-card-qty { display: inline-flex; align-items: center; gap: 6px; background: var(--bg3); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 4px 10px; font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+.price-breakdown { background: var(--bg2); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 24px 28px; margin-bottom: 20px; }
+.price-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px; }
+.price-row:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.05); }
+.price-row .label { color: var(--muted); }
+.price-row .value { font-weight: 500; }
+.price-row.old .value { text-decoration: line-through; color: var(--muted); font-weight: 300; }
+.price-row.discount .value { color: var(--red); }
+.price-row.total { padding-top: 16px; border-top: 1px solid var(--border) !important; }
+.price-row.total .label { font-weight: 600; color: var(--text); font-size: 15px; }
+.price-row.total .value { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--gold); text-shadow: 0 0 12px rgba(255,215,0,0.3); }
+
+.badges { display: flex; flex-direction: column; gap: 10px; }
+.badge-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); }
+.badge-row i { color: var(--green); font-size: 14px; width: 16px; }
+
+.checkout-form { flex: 1; max-width: 500px; }
+
+.form-section { background: var(--bg2); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 28px; margin-bottom: 20px; }
+.form-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.form-section-title i { color: var(--gold); font-size: 16px; }
+.form-row { display: flex; gap: 14px; margin-bottom: 14px; }
+.form-group { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.form-group input, .form-group select { background: var(--bg3); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; padding: 12px 14px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; outline: none; transition: border-color 0.25s, box-shadow 0.25s; width: 100%; }
+.form-group input::placeholder { color: rgba(255,255,255,0.2); }
+.form-group input:focus, .form-group select:focus { border-color: rgba(255,215,0,0.4); box-shadow: 0 0 0 3px rgba(255,215,0,0.06); }
+.form-group select { appearance: none; cursor: pointer; }
+
+.paypal-section { background: var(--bg2); border: 1px solid rgba(255,215,0,0.2); border-radius: 12px; padding: 28px; margin-bottom: 20px; }
+.paypal-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.paypal-title i { color: #009cde; font-size: 16px; }
+.paypal-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+#paypal-button-container { min-height: 50px; }
+#result-message { text-align: center; margin-top: 14px; font-size: 13px; min-height: 20px; }
+.paypal-secure { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 16px; font-size: 11px; color: var(--muted); }
+.paypal-secure i { color: var(--green); }
+
+.urgency-bar { background: rgba(232,35,42,0.1); border: 1px solid rgba(232,35,42,0.25); border-radius: 8px; padding: 12px 18px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #ff6b6b; margin-bottom: 20px; }
+
+/* SUCCESS */
+.success-overlay { display: none; position: fixed; inset: 0; z-index: 500; background: rgba(8,8,8,0.97); align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 40px; }
+.success-overlay.show { display: flex; }
+.success-icon { width: 90px; height: 90px; background: rgba(34,197,94,0.1); border: 2px solid var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 28px; animation: popIn 0.5s 0.2s both cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.success-icon i { font-size: 36px; color: var(--green); }
+.success-title { font-family: 'Bebas Neue', sans-serif; font-size: 52px; letter-spacing: 2px; margin-bottom: 12px; }
+.success-msg { color: var(--muted); font-size: 15px; line-height: 1.7; max-width: 400px; margin-bottom: 36px; }
+.success-order { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 16px 28px; margin-bottom: 32px; font-size: 13px; color: var(--muted); }
+.success-order strong { color: var(--gold); font-size: 16px; display: block; margin-top: 4px; }
+.success-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--gold); color: #000; padding: 16px 36px; border-radius: 4px; font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; text-decoration: none; transition: transform 0.2s, box-shadow 0.3s; }
+.success-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(255,215,0,0.4); }
+
+footer { text-align: center; padding: 32px 60px; background: var(--bg); border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; letter-spacing: 0.5px; margin-top: 40px; }
+footer span { color: var(--gold); }
+
+@media (max-width: 900px) {
+  nav { padding: 16px 20px; }
+  .checkout-page { flex-direction: column; padding: 100px 20px 60px; }
+  .product-summary { position: static; max-width: 100%; }
+  .checkout-form { max-width: 100%; }
+  .form-row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">LUMINOVA</a>
+  <a class="nav-back" href="index.html"><i class="fa-solid fa-arrow-left"></i> Retour</a>
+</nav>
+
+<div class="success-overlay" id="successOverlay">
+  <div class="success-icon"><i class="fa-solid fa-check"></i></div>
+  <div class="success-title">Commande confirmée !</div>
+  <p class="success-msg">Merci pour votre achat. Votre lampe Luminova est en cours de préparation. Vous recevrez une confirmation par email sous peu.</p>
+  <div class="success-order">
+    Numéro de commande<br>
+    <strong id="orderNumber">#LUM-000000</strong>
+  </div>
+  <a class="success-btn" href="index.html"><i class="fa-solid fa-house"></i> Retour à l'accueil</a>
+</div>
+
+<div class="checkout-page">
+
+  <div class="product-summary">
+    <div class="summary-label">Résumé de commande</div>
+    <div class="urgency-bar">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      Stock limité — Offre valable aujourd'hui uniquement
+    </div>
+    <div class="product-card">
+      <div class="product-card-img">
+        <img src="image1.png" alt="Luminova" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="placeholder-icon" style="display:none"><i class="fa-solid fa-flashlight"></i></div>
+      </div>
+      <div class="product-card-info">
+        <div class="product-card-name">Lampe Torche Luminova</div>
+        <div class="product-card-desc">100 000 Lumens · 8 000m portée<br>IP67 Waterproof · Recharge USB-C</div>
+        <div class="product-card-qty"><i class="fa-solid fa-box"></i> Quantité : 1</div>
+      </div>
+    </div>
+    <div class="price-breakdown">
+      <div class="price-row old"><span class="label">Prix original</span><span class="value">29,90 €</span></div>
+      <div class="price-row discount"><span class="label">Réduction (−74%)</span><span class="value">−22,00 €</span></div>
+      <div class="price-row"><span class="label">Livraison</span><span class="value" style="color:var(--green)">Gratuite</span></div>
+      <div class="price-row total"><span class="label">Total</span><span class="value">7,90 €</span></div>
+    </div>
+    <div class="badges">
+      <div class="badge-row"><i class="fa-solid fa-shield-halved"></i> Paiement 100% sécurisé via PayPal</div>
+      <div class="badge-row"><i class="fa-solid fa-rotate-left"></i> Satisfait ou remboursé 30 jours</div>
+      <div class="badge-row"><i class="fa-solid fa-truck"></i> Livraison offerte — 5 à 7 jours ouvrés</div>
+      <div class="badge-row"><i class="fa-solid fa-lock"></i> Données protégées et chiffrées</div>
+    </div>
+  </div>
+
+  <div class="checkout-form">
+    <div class="form-section">
+      <div class="form-section-title"><i class="fa-solid fa-user"></i> Vos coordonnées</div>
+      <div class="form-row">
+        <div class="form-group"><label>Prénom</label><input type="text" id="firstName" placeholder="Jean" autocomplete="given-name"></div>
+        <div class="form-group"><label>Nom</label><input type="text" id="lastName" placeholder="Dupont" autocomplete="family-name"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Email</label><input type="email" id="email" placeholder="jean@exemple.fr" autocomplete="email"></div>
+        <div class="form-group"><label>Téléphone</label><input type="tel" id="phone" placeholder="+33 6 00 00 00 00" autocomplete="tel"></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title"><i class="fa-solid fa-location-dot"></i> Adresse de livraison</div>
+      <div class="form-row">
+        <div class="form-group"><label>Adresse</label><input type="text" id="address" placeholder="12 rue de la Lumière" autocomplete="street-address"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Code postal</label><input type="text" id="zip" placeholder="75001" autocomplete="postal-code" maxlength="10"></div>
+        <div class="form-group"><label>Ville</label><input type="text" id="city" placeholder="Paris" autocomplete="address-level2"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Pays</label>
+          <select id="country" autocomplete="country">
+            <option value="FR">France</option>
+            <option value="BE">Belgique</option>
+            <option value="CH">Suisse</option>
+            <option value="LU">Luxembourg</option>
+            <option value="CA">Canada</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="paypal-section">
+      <div class="paypal-title"><i class="fa-brands fa-paypal"></i> Paiement sécurisé</div>
+      <p class="paypal-subtitle">Payez par PayPal, carte bancaire ou Payer Plus Tard — 100% sécurisé.</p>
+      <div id="paypal-button-container"></div>
+      <p id="result-message"></p>
+      <div class="paypal-secure"><i class="fa-solid fa-lock"></i> Paiement chiffré SSL — Vos données sont protégées</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>© 2026 <span>LUMINOVA</span> — Tous droits réservés · Paiement sécurisé PayPal</footer>
+
+<!-- PayPal SDK — format Developer Studio -->
+  <script
+            src="https://www.paypal.com/sdk/js?client-id=AZjL5HoRXP8Cek0TlYT-pTuOh1RWlGCM3XIIjqKTr8Bo8P4ImEn0WmHOtdIAW6tXBS0Z-X2ymXhJShkI&buyer-country=US&currency=USD&components=buttons&enable-funding=venmo,paylater,card"
+            data-sdk-integration-source="developer-studio"
+        ></script>
+        <script src="app.js"></script>
+</body>
+</html>
