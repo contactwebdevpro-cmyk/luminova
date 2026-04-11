@@ -288,11 +288,9 @@ footer span { color: var(--gold); }
         const res = await fetch('/api/create-order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            amount:   '7.90',
-            currency: 'EUR',
-            customer: form,
-          }),
+         body: JSON.stringify({
+  customer: form,
+}),
         });
 
         const data = await res.json();
