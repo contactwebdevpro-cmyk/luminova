@@ -6,7 +6,6 @@
 <title>Luminova | Commander</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <style>
 :root {
   --gold: #FFD700;
@@ -75,17 +74,22 @@ nav {
 .form-group input::placeholder { color: rgba(255,255,255,0.2); }
 .form-group input:focus, .form-group select:focus { border-color: rgba(255,215,0,0.4); box-shadow: 0 0 0 3px rgba(255,215,0,0.06); }
 .form-group select { appearance: none; cursor: pointer; }
+.form-group select option { background: var(--bg3); color: var(--text); }
 
 .paypal-section { background: var(--bg2); border: 1px solid rgba(255,215,0,0.2); border-radius: 12px; padding: 28px; margin-bottom: 20px; }
 .paypal-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
 .paypal-title i { color: #009cde; font-size: 16px; }
 .paypal-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
 #paypal-button-container { min-height: 50px; }
-#result-message { text-align: center; margin-top: 14px; font-size: 13px; min-height: 20px; }
+
+.error-msg { background: rgba(232,35,42,0.1); border: 1px solid rgba(232,35,42,0.3); border-radius: 6px; padding: 10px 14px; font-size: 13px; color: #ff6b6b; margin-top: 10px; display: none; }
 .paypal-secure { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 16px; font-size: 11px; color: var(--muted); }
 .paypal-secure i { color: var(--green); }
 
 .urgency-bar { background: rgba(232,35,42,0.1); border: 1px solid rgba(232,35,42,0.25); border-radius: 8px; padding: 12px 18px; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #ff6b6b; margin-bottom: 20px; }
+
+/* Champs obligatoires manquants */
+.form-group input.invalid { border-color: rgba(232,35,42,0.6); box-shadow: 0 0 0 3px rgba(232,35,42,0.08); }
 
 /* SUCCESS */
 .success-overlay { display: none; position: fixed; inset: 0; z-index: 500; background: rgba(8,8,8,0.97); align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 40px; }
@@ -119,6 +123,7 @@ footer span { color: var(--gold); }
   <a class="nav-back" href="index.html"><i class="fa-solid fa-arrow-left"></i> Retour</a>
 </nav>
 
+<!-- SUCCESS -->
 <div class="success-overlay" id="successOverlay">
   <div class="success-icon"><i class="fa-solid fa-check"></i></div>
   <div class="success-title">Commande confirmée !</div>
@@ -132,6 +137,7 @@ footer span { color: var(--gold); }
 
 <div class="checkout-page">
 
+  <!-- RÉSUMÉ -->
   <div class="product-summary">
     <div class="summary-label">Résumé de commande</div>
     <div class="urgency-bar">
@@ -141,7 +147,7 @@ footer span { color: var(--gold); }
     <div class="product-card">
       <div class="product-card-img">
         <img src="image1.png" alt="Luminova" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="placeholder-icon" style="display:none"><i class="fa-solid fa-flashlight"></i></div>
+        <div class="placeholder-icon" style="display:none"><i class="fa-solid fa-bolt"></i></div>
       </div>
       <div class="product-card-info">
         <div class="product-card-name">Lampe Torche Luminova</div>
@@ -163,15 +169,16 @@ footer span { color: var(--gold); }
     </div>
   </div>
 
+  <!-- FORMULAIRE -->
   <div class="checkout-form">
     <div class="form-section">
       <div class="form-section-title"><i class="fa-solid fa-user"></i> Vos coordonnées</div>
       <div class="form-row">
-        <div class="form-group"><label>Prénom</label><input type="text" id="firstName" placeholder="Jean" autocomplete="given-name"></div>
-        <div class="form-group"><label>Nom</label><input type="text" id="lastName" placeholder="Dupont" autocomplete="family-name"></div>
+        <div class="form-group"><label>Prénom *</label><input type="text" id="firstName" placeholder="Jean" autocomplete="given-name"></div>
+        <div class="form-group"><label>Nom *</label><input type="text" id="lastName" placeholder="Dupont" autocomplete="family-name"></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Email</label><input type="email" id="email" placeholder="jean@exemple.fr" autocomplete="email"></div>
+        <div class="form-group"><label>Email *</label><input type="email" id="email" placeholder="jean@exemple.fr" autocomplete="email"></div>
         <div class="form-group"><label>Téléphone</label><input type="tel" id="phone" placeholder="+33 6 00 00 00 00" autocomplete="tel"></div>
       </div>
     </div>
@@ -179,11 +186,11 @@ footer span { color: var(--gold); }
     <div class="form-section">
       <div class="form-section-title"><i class="fa-solid fa-location-dot"></i> Adresse de livraison</div>
       <div class="form-row">
-        <div class="form-group"><label>Adresse</label><input type="text" id="address" placeholder="12 rue de la Lumière" autocomplete="street-address"></div>
+        <div class="form-group"><label>Adresse *</label><input type="text" id="address" placeholder="12 rue de la Lumière" autocomplete="street-address"></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Code postal</label><input type="text" id="zip" placeholder="75001" autocomplete="postal-code" maxlength="10"></div>
-        <div class="form-group"><label>Ville</label><input type="text" id="city" placeholder="Paris" autocomplete="address-level2"></div>
+        <div class="form-group"><label>Code postal *</label><input type="text" id="zip" placeholder="75001" autocomplete="postal-code" maxlength="10"></div>
+        <div class="form-group"><label>Ville *</label><input type="text" id="city" placeholder="Paris" autocomplete="address-level2"></div>
       </div>
       <div class="form-row">
         <div class="form-group">
@@ -203,7 +210,7 @@ footer span { color: var(--gold); }
       <div class="paypal-title"><i class="fa-brands fa-paypal"></i> Paiement sécurisé</div>
       <p class="paypal-subtitle">Payez par PayPal, carte bancaire ou Payer Plus Tard — 100% sécurisé.</p>
       <div id="paypal-button-container"></div>
-      <p id="result-message"></p>
+      <div class="error-msg" id="errorMsg"></div>
       <div class="paypal-secure"><i class="fa-solid fa-lock"></i> Paiement chiffré SSL — Vos données sont protégées</div>
     </div>
   </div>
@@ -212,11 +219,128 @@ footer span { color: var(--gold); }
 
 <footer>© 2026 <span>LUMINOVA</span> — Tous droits réservés · Paiement sécurisé PayPal</footer>
 
-<!-- PayPal SDK — format Developer Studio -->
-  <script
-            src="https://www.paypal.com/sdk/js?client-id=AZjL5HoRXP8Cek0TlYT-pTuOh1RWlGCM3XIIjqKTr8Bo8P4ImEn0WmHOtdIAW6tXBS0Z-X2ymXhJShkI&buyer-country=US&currency=USD&components=buttons&enable-funding=venmo,paylater,card"
-            data-sdk-integration-source="developer-studio"
-        ></script>
-        <script src="app.js"></script>
+<!-- PayPal SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=AZjL5HoRXP8Cek0TlYT-pTuOh1RWlGCM3XIIjqKTr8Bo8P4ImEn0WmHOtdIAW6tXBS0Z-X2ymXhJShkI&currency=EUR&intent=capture" data-sdk-integration-source="developer-studio"></script>
+
+<script>
+  // ─── Validation formulaire ───────────────────────────────────────────────
+  function getFormData() {
+    return {
+      firstName: document.getElementById('firstName').value.trim(),
+      lastName:  document.getElementById('lastName').value.trim(),
+      email:     document.getElementById('email').value.trim(),
+      address:   document.getElementById('address').value.trim(),
+      zip:       document.getElementById('zip').value.trim(),
+      city:      document.getElementById('city').value.trim(),
+      country:   document.getElementById('country').value,
+    };
+  }
+
+  function validateForm() {
+    const d = getFormData();
+    const required = ['firstName','lastName','email','address','zip','city'];
+    let valid = true;
+    required.forEach(id => {
+      const el = document.getElementById(id);
+      if (!d[id]) { el.classList.add('invalid'); valid = false; }
+      else el.classList.remove('invalid');
+    });
+    // Validation email basique
+    if (d.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email)) {
+      document.getElementById('email').classList.add('invalid');
+      valid = false;
+    }
+    return valid;
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+  function hideError() {
+    document.getElementById('errorMsg').style.display = 'none';
+  }
+
+  // ─── Boutons PayPal ──────────────────────────────────────────────────────
+  paypal.Buttons({
+    style: {
+      shape:  'rect',
+      color:  'gold',
+      layout: 'vertical',
+      label:  'pay',
+    },
+
+    // 1. Créer la commande côté serveur
+    createOrder: async function() {
+      hideError();
+      if (!validateForm()) {
+        showError('Veuillez remplir tous les champs obligatoires (*).');
+        return Promise.reject('form_invalid');
+      }
+
+      const form = getFormData();
+
+      try {
+        const res = await fetch('/api/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount:   '7.90',
+            currency: 'EUR',
+            customer: form,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data.id) {
+          showError('Erreur lors de la création de la commande. Réessayez.');
+          return Promise.reject('server_error');
+        }
+
+        return data.id; // PayPal Order ID
+      } catch (err) {
+        showError('Erreur réseau. Vérifiez votre connexion et réessayez.');
+        return Promise.reject(err);
+      }
+    },
+
+    // 2. Capturer le paiement après approbation
+    onApprove: async function(data) {
+      try {
+        const res = await fetch('/api/capture-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderID: data.orderID }),
+        });
+
+        const capture = await res.json();
+
+        if (capture.status === 'COMPLETED') {
+          // Succès !
+          const orderNum = '#LUM-' + Math.floor(100000 + Math.random() * 900000);
+          document.getElementById('orderNumber').textContent = orderNum;
+          document.getElementById('successOverlay').classList.add('show');
+          document.body.style.overflow = 'hidden';
+        } else {
+          showError('Le paiement n\'a pas pu être confirmé. Contactez-nous.');
+        }
+      } catch (err) {
+        showError('Erreur lors de la confirmation du paiement.');
+      }
+    },
+
+    onError: function(err) {
+      console.error('PayPal error:', err);
+      showError('Une erreur PayPal est survenue. Veuillez réessayer.');
+    },
+
+    onCancel: function() {
+      showError('Paiement annulé. Vous pouvez réessayer quand vous voulez.');
+    }
+
+  }).render('#paypal-button-container');
+</script>
 </body>
 </html>
