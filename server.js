@@ -25,8 +25,8 @@ const {
 
 const client = new Client({
     clientCredentialsAuthCredentials: {
-        oAuthClientId: PAYPAL_CLIENT_ID,
-        oAuthClientSecret: PAYPAL_CLIENT_SECRET,
+        oAuthClientId: AZjL5HoRXP8Cek0TlYT-pTuOh1RWlGCM3XIIjqKTr8Bo8P4ImEn0WmHOtdIAW6tXBS0Z-X2ymXhJShkI,
+        oAuthClientSecret: EClPE5yoHKNcOP9xx98wL1c-h150Vci1l2foT4OfMQoNGs9UdOonktc_K1KvUw_laKuDpZAF2qyBR2RL,
     },
     timeout: 0,
     environment: Environment.Sandbox,
