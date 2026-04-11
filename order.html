@@ -221,7 +221,7 @@ footer span { color: var(--gold); }
 
 <!-- PayPal SDK -->
 <script
-            src="https://www.paypal.com/sdk/js?client-id=AZjL5HoRXP8Cek0TlYT-pTuOh1RWlGCM3XIIjqKTr8Bo8P4ImEn0WmHOtdIAW6tXBS0Z-X2ymXhJShkI&buyer-country=FR&currency=EUR&components=buttons&enable-funding=venmo,card&disable-funding=paylater"
+            src="https://www.paypal.com/sdk/js?client-id=AZjL5HoRXP8Cek0TlYT-pTuOh1RWlGCM3XIIjqKTr8Bo8P4ImEn0WmHOtdIAW6tXBS0Z-X2ymXhJShkI&currency=EUR&intent=capture&locale=fr_FR"
             data-sdk-integration-source="developer-studio"
         ></script>
 
@@ -279,7 +279,7 @@ footer span { color: var(--gold); }
       hideError();
       if (!validateForm()) {
         showError('Veuillez remplir tous les champs obligatoires (*).');
-        return Promise.reject('form_invalid');
+        throw Object.assign(new Error('form_invalid'), { _formInvalid: true });
       }
 
       const form = getFormData();
@@ -335,6 +335,8 @@ footer span { color: var(--gold); }
     },
 
     onError: function(err) {
+      // Ne pas afficher d'erreur si c'est une rejection volontaire (formulaire invalide)
+      if (err === 'form_invalid' || (err && err.message === 'form_invalid')) return;
       console.error('PayPal error:', err);
       showError('Une erreur PayPal est survenue. Veuillez réessayer.');
     },
