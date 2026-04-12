@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://luminova-sell.vercel.app/sitemap.xml
