@@ -41,7 +41,7 @@ nav {
   text-shadow: 0 0 20px rgba(255,215,0,0.4);
   text-decoration: none;
 }
-nav ul { display: flex; gap: 36px; list-style: none; }
+nav ul { display: flex; gap: 36px; list-style: none; align-items: center; }
 nav ul li a {
   font-size: 13px; font-weight: 500; letter-spacing: 1.5px;
   text-transform: uppercase; cursor: pointer; color: var(--muted);
@@ -54,6 +54,27 @@ nav ul li a::after {
 }
 nav ul li a:hover { color: var(--text); }
 nav ul li a:hover::after { width: 100%; }
+
+/* ── Tracking pill in nav ── */
+.nav-track {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; text-decoration: none;
+  color: var(--gold);
+  border: 1px solid rgba(255,215,0,0.3);
+  padding: 6px 14px; border-radius: 4px;
+  transition: background 0.25s, border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+}
+.nav-track i { font-size: 11px; }
+.nav-track:hover {
+  background: rgba(255,215,0,0.1);
+  border-color: rgba(255,215,0,0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(255,215,0,0.15);
+}
+/* Override ::after for this link */
+nav ul li a.nav-track::after { display: none; }
+
 .nav-cta {
   background: var(--red); color: white;
   font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
@@ -246,9 +267,7 @@ nav ul li a:hover::after { width: 100%; }
 .review-author { font-size: 13px; font-weight: 600; color: var(--text); }
 .review-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-.reviews-more {
-  text-align: center; margin-top: 48px;
-}
+.reviews-more { text-align: center; margin-top: 48px; }
 .reviews-more a {
   display: inline-flex; align-items: center; gap: 8px;
   color: var(--muted); font-size: 13px; letter-spacing: 1px; text-decoration: none;
@@ -292,7 +311,7 @@ footer span { color: var(--gold); }
   <ul>
     <li><a href="index.html">Accueil</a></li>
     <li><a href="avis.html">Avis</a></li>
-    
+    <li><a href="tracking.html" class="nav-track"><i class="fa-solid fa-location-dot"></i> Suivre ma commande</a></li>
   </ul>
   <a class="nav-cta" href="order.html">Commander</a>
 </nav>
