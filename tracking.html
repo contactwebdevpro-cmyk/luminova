@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Suivi de commande — Luminova</title>
+  <meta name="description" content="Suivez votre commande Luminova en temps réel.">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --gold: #FFD700;
+      --gold-dim: #c9a400;
+      --gold-glow: rgba(255,215,0,0.18);
+      --red: #E8232A;
+      --red-dark: #b01a20;
+      --bg: #080808;
+      --bg2: #111111;
+      --bg3: #191919;
+      --text: #f0f0f0;
+      --muted: #888;
+      --border: rgba(255,215,0,0.15);
+      --border-hover: rgba(255,215,0,0.35);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 60px;
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px; letter-spacing: 4px; color: var(--gold);
+      text-shadow: 0 0 20px rgba(255,215,0,0.4);
+      text-decoration: none;
+    }
+    nav ul { display: flex; gap: 36px; list-style: none; }
+    nav ul li a {
+      font-size: 13px; font-weight: 500; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--muted);
+      position: relative; padding-bottom: 4px; transition: color 0.25s;
+      text-decoration: none; display: block;
+    }
+    nav ul li a::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 1px; background: var(--gold); transition: width 0.3s ease;
+    }
+    nav ul li a:hover { color: var(--text); }
+    nav ul li a:hover::after { width: 100%; }
+    nav ul li a.active { color: var(--gold); }
+    nav ul li a.active::after { width: 100%; }
+
+    .nav-cta {
+      background: var(--red); color: white;
+      font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+      padding: 10px 24px; border-radius: 4px; cursor: pointer;
+      transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+      text-decoration: none;
+    }
+    .nav-cta:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,35,42,0.4); }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 160px 60px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 500px;
+      background: radial-gradient(ellipse, rgba(255,215,0,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 2px; padding: 6px 16px;
+      font-size: 11px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 28px;
+    }
+    .hero-eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: blink 1.5s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 7vw, 80px);
+      letter-spacing: 3px; line-height: 1;
+      margin-bottom: 20px;
+    }
+    .hero h1 .accent { color: var(--gold); text-shadow: 0 0 40px rgba(255,215,0,0.4); }
+    .hero-sub {
+      color: var(--muted); font-size: 15px; font-weight: 300;
+      line-height: 1.7; max-width: 480px; margin: 0 auto 52px;
+    }
+
+    /* ─── SEARCH CARD ─── */
+    .search-section { max-width: 760px; margin: 0 auto; padding: 0 24px 100px; }
+
+    .search-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .search-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    }
+
+    .input-group { display: flex; gap: 12px; align-items: stretch; }
+    .input-wrap { flex: 1; position: relative; }
+    .input-icon {
+      position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+      color: var(--muted); font-size: 15px; pointer-events: none;
+    }
+    input[type="text"] {
+      width: 100%; padding: 18px 18px 18px 50px;
+      background: var(--bg3); border: 1px solid rgba(255,215,0,0.12);
+      border-radius: 4px; color: var(--text);
+      font-family: 'Inter', sans-serif; font-size: 15px; letter-spacing: 0.5px;
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input[type="text"]::placeholder { color: var(--muted); }
+    input[type="text"]:focus {
+      border-color: rgba(255,215,0,0.4);
+      box-shadow: 0 0 0 3px rgba(255,215,0,0.06);
+    }
+    input[type="text"].shake { animation: shake 0.4s ease; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
+
+    .btn-track {
+      padding: 18px 28px;
+      background: var(--gold); color: #000;
+      border: none; border-radius: 4px;
+      font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; white-space: nowrap;
+      display: flex; align-items: center; gap: 8px;
+      position: relative; overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.3s, background 0.25s;
+    }
+    .btn-track::before {
+      content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.4s;
+    }
+    .btn-track:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(255,215,0,0.35); background: #ffe033; }
+    .btn-track:hover::before { left: 100%; }
+    .btn-track:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .input-hint { margin-top: 14px; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+    .hint-bar { width: 3px; height: 12px; background: var(--gold-dim); border-radius: 1px; flex-shrink: 0; }
+
+    /* ─── RESULT ─── */
+    #result-section { display: none; margin-top: 28px; }
+    #result-section.visible { display: block; animation: fadeUp 0.4s ease; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+    .result-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 28px 32px; position: relative; overflow: hidden;
+    }
+    .result-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    }
+
+    .result-header {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px; margin-bottom: 20px;
+    }
+
+    .carrier-pill {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--bg3); border: 1px solid rgba(255,215,0,0.12);
+      padding: 10px 16px; border-radius: 4px;
+    }
+    .carrier-flag { font-size: 20px; }
+    .carrier-sub { font-size: 10px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+    .carrier-name { font-size: 14px; color: var(--text); font-weight: 600; }
+
+    .tracking-badge {
+      font-size: 13px; color: var(--muted);
+      background: var(--bg3); border: 1px solid rgba(255,215,0,0.12);
+      padding: 8px 14px; border-radius: 4px; letter-spacing: 0.5px;
+      cursor: pointer; transition: color 0.2s, border-color 0.2s;
+    }
+    .tracking-badge:hover { color: var(--gold); border-color: rgba(255,215,0,0.4); }
+
+    /* Iframe */
+    .tracking-frame-wrap {
+      border-radius: 6px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.07);
+      position: relative; background: var(--bg3);
+    }
+    .frame-topbar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      background: var(--bg2);
+    }
+    .frame-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .frame-url { font-size: 11px; color: var(--muted); flex: 1; text-align: center; letter-spacing: 0.3px; }
+
+    #tracking-iframe {
+      width: 100%; height: 580px; border: none; display: block; background: #fff;
+    }
+    .frame-spinner {
+      position: absolute; inset: 42px 0 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: var(--bg3); gap: 14px; pointer-events: none;
+    }
+    .spinner-ring {
+      width: 36px; height: 36px;
+      border: 3px solid rgba(255,215,0,0.15);
+      border-top-color: var(--gold); border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg) } }
+    .frame-spinner p { font-size: 13px; color: var(--muted); }
+    #tracking-iframe.loaded + .frame-spinner { display: none; }
+
+    .open-new-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 13px; margin-top: 14px;
+      background: transparent; border: 1px solid rgba(255,215,0,0.12);
+      border-radius: 4px; color: var(--muted);
+      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500;
+      letter-spacing: 1px; text-transform: uppercase;
+      text-decoration: none; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .open-new-btn:hover { border-color: rgba(255,215,0,0.4); color: var(--gold); }
+
+    /* ─── INFO GRID ─── */
+    .info-section {
+      background: var(--bg2); border-top: 1px solid var(--border);
+      padding: 80px 60px;
+    }
+    .info-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; max-width: 900px; margin: 0 auto; }
+    .info-card {
+      background: var(--bg3); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px; padding: 28px; text-align: center;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .info-card:hover {
+      border-color: rgba(255,215,0,0.25);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    }
+    .info-card-icon { font-size: 28px; margin-bottom: 14px; color: var(--gold); }
+    .info-card-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .info-card-desc { font-size: 13px; color: var(--muted); line-height: 1.7; font-weight: 300; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center; padding: 32px 60px;
+      background: var(--bg); border-top: 1px solid var(--border);
+      color: var(--muted); font-size: 12px; letter-spacing: 0.5px;
+    }
+    footer span { color: var(--gold); }
+    footer a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    footer a:hover { color: var(--gold); }
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:768px){
+      nav { padding: 16px 20px; }
+      nav ul { display: none; }
+      .hero { padding: 120px 24px 60px; }
+      .search-section { padding: 0 16px 80px; }
+      .search-card { padding: 24px 20px; }
+      .input-group { flex-direction: column; }
+      .info-section { padding: 60px 20px; }
+      .info-grid { grid-template-columns: 1fr; }
+      #tracking-iframe { height: 480px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">LUMINOVA</a>
+  <ul>
+    <li><a href="index.html">Accueil</a></li>
+    <li><a href="avis.html">Avis</a></li>
+    <li><a href="tracking.html" class="active">Suivi</a></li>
+  </ul>
+  <a class="nav-cta" href="order.html">Commander</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Livraison mondiale</div>
+  <h1>Suivez votre<br><span class="accent">commande</span></h1>
+  <p class="hero-sub">Entrez votre numéro de suivi pour obtenir des informations en temps réel sur l'acheminement de votre colis.</p>
+</div>
+
+<!-- SEARCH -->
+<div class="search-section">
+  <div class="search-card">
+    <div class="input-group">
+      <div class="input-wrap">
+        <i class="fa-solid fa-box input-icon"></i>
+        <input
+          type="text"
+          id="tracking-input"
+          placeholder="Ex : LV209031969CN, YT72760621444007800…"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+      <button class="btn-track" id="track-btn" onclick="trackPackage()">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        Suivre
+      </button>
+    </div>
+    <div class="input-hint">
+      <span class="hint-bar"></span>
+      Formats acceptés : CN, HK, SG, RU, US et autres préfixes internationaux
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result-section">
+    <div class="result-card">
+      <div class="result-header">
+        <div class="carrier-pill">
+          <span class="carrier-flag" id="carrier-flag">🌐</span>
+          <div>
+            <div class="carrier-sub">Transporteur détecté</div>
+            <div class="carrier-name" id="carrier-name-el">—</div>
+          </div>
+        </div>
+        <div class="tracking-badge" id="tracking-display" onclick="copyTracking()" title="Copier le numéro"></div>
+      </div>
+
+      <div class="tracking-frame-wrap">
+        <div class="frame-topbar">
+          <span class="frame-dot" style="background:#e8685c;"></span>
+          <span class="frame-dot" style="background:#e8b84c;"></span>
+          <span class="frame-dot" style="background:#4caf82;"></span>
+          <span class="frame-url" id="frame-url-label">17track.net</span>
+        </div>
+        <iframe
+          id="tracking-iframe"
+          src=""
+          title="Suivi de colis 17track"
+          scrolling="yes"
+          allowfullscreen
+          onload="onFrameLoad()"
+        ></iframe>
+        <div class="frame-spinner" id="frame-spinner">
+          <div class="spinner-ring"></div>
+          <p>Chargement du suivi…</p>
+        </div>
+      </div>
+
+      <a class="open-new-btn" id="open-new-btn" href="#" target="_blank" rel="noopener">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        Ouvrir dans un nouvel onglet
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- INFO GRID -->
+<div class="info-section">
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-icon"><i class="fa-solid fa-earth-europe"></i></div>
+      <div class="info-card-title">Livraison internationale</div>
+      <div class="info-card-desc">Nous livrons dans plus de 200 pays et territoires dans le monde entier.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon"><i class="fa-solid fa-bell"></i></div>
+      <div class="info-card-title">Mises à jour en temps réel</div>
+      <div class="info-card-desc">Suivez chaque étape de votre colis depuis l'expédition jusqu'à la livraison.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon"><i class="fa-solid fa-headset"></i></div>
+      <div class="info-card-title">Support client</div>
+      <div class="info-card-desc">Une question ? Notre équipe est disponible pour vous aider à tout moment.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  © 2026 <span>LUMINOVA</span> — <a href="index.html">Retour à la boutique</a>
+  &nbsp;·&nbsp; <a href="mailto:support@luminova-sell.vercel.app">Contactez-nous</a>
+</footer>
+
+<script>
+  const CARRIERS = [
+    { prefix: 'LV',  name: 'Cainiao / AliExpress Shipping', flag: '🌐' },
+    { prefix: 'JY',  name: 'Cainiao',                       flag: '🌐' },
+    { prefix: 'YT',  name: 'Yanwen Express',                flag: '🇨🇳' },
+    { prefix: 'U',   name: 'Cainiao Super Economy',         flag: '🌐' },
+    { prefix: 'RR',  name: 'China Post (Registered)',        flag: '🇨🇳' },
+    { prefix: 'CP',  name: 'China Post',                    flag: '🇨🇳' },
+    { prefix: 'EA',  name: 'EMS China Post',                flag: '🇨🇳' },
+    { prefix: 'EB',  name: 'EMS China Post',                flag: '🇨🇳' },
+    { prefix: 'EC',  name: 'EMS China Post',                flag: '🇨🇳' },
+    { prefix: 'ZA',  name: 'Hong Kong Post',                flag: '🇭🇰' },
+    { prefix: 'SF',  name: 'SF Express',                    flag: '🇨🇳' },
+    { prefix: 'LC',  name: 'La Poste / Colissimo',          flag: '🇫🇷' },
+    { prefix: 'LT',  name: 'La Poste',                      flag: '🇫🇷' },
+    { prefix: 'DHL', name: 'DHL Express',                   flag: '🌍' },
+    { prefix: '1Z',  name: 'UPS',                           flag: '🇺🇸' },
+  ];
+
+  function detectCarrier(t) {
+    const u = t.trim().toUpperCase();
+    for (const c of CARRIERS) {
+      if (u.startsWith(c.prefix)) return c;
+    }
+    return { name: 'Transporteur international', flag: '🌐' };
+  }
+
+  let currentTracking = '';
+
+  function trackPackage() {
+    const input = document.getElementById('tracking-input');
+    const num = input.value.trim();
+
+    if (!num || num.length < 6) {
+      input.classList.remove('shake');
+      void input.offsetWidth;
+      input.classList.add('shake');
+      input.focus();
+      return;
+    }
+
+    currentTracking = num;
+    const carrier = detectCarrier(num);
+    document.getElementById('carrier-name-el').textContent = carrier.name;
+    document.getElementById('carrier-flag').textContent = carrier.flag;
+    document.getElementById('tracking-display').textContent = num;
+
+    const trackUrl = `https://t.17track.net/fr#nums=${encodeURIComponent(num)}`;
+    document.getElementById('frame-url-label').textContent = '17track.net — ' + num;
+    document.getElementById('open-new-btn').href = trackUrl;
+
+    const iframe = document.getElementById('tracking-iframe');
+    const spinner = document.getElementById('frame-spinner');
+    iframe.classList.remove('loaded');
+    spinner.style.display = 'flex';
+    iframe.src = trackUrl;
+
+    const section = document.getElementById('result-section');
+    section.classList.add('visible');
+    setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+  }
+
+  function onFrameLoad() {
+    document.getElementById('tracking-iframe').classList.add('loaded');
+    document.getElementById('frame-spinner').style.display = 'none';
+  }
+
+  function copyTracking() {
+    if (!currentTracking) return;
+    navigator.clipboard.writeText(currentTracking).then(() => {
+      const el = document.getElementById('tracking-display');
+      const orig = el.textContent;
+      el.textContent = 'Copié ✓';
+      setTimeout(() => { el.textContent = orig; }, 1500);
+    });
+  }
+
+  document.getElementById('tracking-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') trackPackage();
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const p = new URLSearchParams(window.location.search);
+    const t = p.get('tracking') || p.get('t') || p.get('num');
+    if (t) {
+      document.getElementById('tracking-input').value = t;
+      trackPackage();
+    }
+  });
+</script>
+</body>
+</html>
