@@ -492,14 +492,21 @@
     if (e.key === 'Enter') trackPackage();
   });
 
-  window.addEventListener('DOMContentLoaded', () => {
-    const p = new URLSearchParams(window.location.search);
-    const t = p.get('tracking') || p.get('t') || p.get('num');
-    if (t) {
-      document.getElementById('tracking-input').value = t;
-      trackPackage();
-    }
-  });
+ window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+
+  // Ajoute "code" ici
+  const trackingCode =
+    params.get('code') ||
+    params.get('tracking') ||
+    params.get('t') ||
+    params.get('num');
+
+  if (trackingCode) {
+    document.getElementById('tracking-input').value = trackingCode;
+    trackPackage();
+  }
+});
 </script>
 </body>
 </html>
